@@ -1,0 +1,10 @@
+{
+    "name": "node-switchmate",
+    "version": "0.0.1",
+    "keywords": ["switchmate", "lights", "automation"],
+    "author": "Evan McClintock",
+    "contributors": [],
+    "dependencies": {
+        "noble-device" : ">=1.4.1"
+    }
+}

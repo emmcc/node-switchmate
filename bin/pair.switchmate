@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+var SwitchmateDevice = require('../index').SwitchmateDevice;
+(validateArgs()) ? createPairingSession() : displayUsage();
+
+/**
+ * Validate commandline arguments.
+ * @returns {Boolean} True on valid, false on invalid.
+ */
+function validateArgs()
+{
+    var valid = (process.argv.length>=2);
+    var invalidDataType = (typeof process.argv[2] === 'undefined');
+    valid = valid && !invalidDataType;
+    return valid;
+}
+
+function createPairingSession()
+{
+    var sm_id = process.argv[2].toLowerCase();
+    setTimeout(onFail, 120 * 1000); //set 2 minute timeout - how long should it take to pair a Switchmate?
+    console.log('Locating '+sm_id+'.');
+    SwitchmateDevice.discoverById(sm_id, onFound);
+}
+
+function displayUsage()
+{
+    console.log('Usage for pair.switchmate:');
+    console.log('Pairs a Switchmate with this device.\n');
+    console.log('pair.switchmate <switchmate_id>\n');
+    process.exit();
+}
+function onFound(Switchmate)
+{
+    PairMode = Switchmate.PairMode();
+    //PairMode = new SwitchmatePairing(Switchmate);
+    PairMode.event.on('msg', function (msg)
+    {
+        console.log(msg);
+    });
+    //Uncomment below for a little more debug information.
+    /*
+    PairMode.event.on('debug', function (msg)
+    {
+        console.log(msg);
+    });*/
+    PairMode.event.on('success', onSuccess);
+    PairMode.event.on('fail', onFail);
+    PairMode.PairSwitchmate();
+}
+
+function onSuccess(Switchmate)
+{
+    console.log('Switchmate was successfully paired.');
+    console.log(Switchmate.AuthString);
+    process.exit();
+}
+
+function onFail()
+{
+    console.log('Switchmate pairing failed.');
+    console.log('Goodbye!');
+    process.exit();
+}
+
