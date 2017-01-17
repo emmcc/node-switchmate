@@ -20,6 +20,8 @@ function createPairingSession()
     setTimeout(onFail, 120 * 1000); //set 2 minute timeout - how long should it take to pair a Switchmate?
     console.log('Locating '+sm_id+'.');
     SwitchmateDevice.discoverById(sm_id, onFound);
+    /*var Discovery = new DiscoverySession();
+    Discovery.FindSwitchmate(sm_id, onFound);*/
 }
 
 function displayUsage()

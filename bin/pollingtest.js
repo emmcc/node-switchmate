@@ -19,6 +19,8 @@ function createTestSession()
 {
     var sm_id = process.argv[2].toLowerCase();
     console.log('Finding ' + sm_id + '.');
+    /*var Discovery = new DiscoverySession();
+    Discovery.FindSwitchmate(sm_id, onFound);*/
     SwitchmateDevice.discoverById(sm_id, onFound);
 }
 
