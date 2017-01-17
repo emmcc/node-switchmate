@@ -1,10 +1,27 @@
 {
-    "name": "node-switchmate",
-    "version": "0.0.1",
-    "keywords": ["switchmate", "lights", "automation"],
-    "author": "Evan McClintock",
-    "contributors": [],
-    "dependencies": {
-        "noble-device" : ">=1.4.1"
-    }
+  "name": "node-switchmate",
+  "version": "0.0.1",
+  "keywords": [
+    "switchmate",
+    "lights",
+    "automation"
+  ],
+  "author": "Evan McClintock",
+  "dependencies": {
+    "noble-device": ">=1.4.1"
+  },
+  "description": "A Node.js API for Switchmate",
+  "main": "index.js",
+  "bin": {
+    "node-switchmate": "pollingtest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emmcc/node-switchmate.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emmcc/node-switchmate/issues"
+  },
+  "homepage": "https://github.com/emmcc/node-switchmate#readme"
 }
