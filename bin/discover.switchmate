@@ -6,7 +6,7 @@ SwitchmateDevice.SCAN_DUPLICATES = false;
 var timeouts = 2;
 var onDiscover = function (sm)
 {
-    console.log('Switchmate found.');
+    console.log('Switchmate v'+ (sm._version === 3 ? 3 : '1/2') +' found.');
     console.log('{ "id" : "' + sm.id + '" }');
 };
 SwitchmateDevice.discoverAll(onDiscover);
