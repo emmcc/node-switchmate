@@ -6,10 +6,9 @@ var SwitchmateDevice = require('../index').SwitchmateDevice;
  * Validate commandline arguments.
  * @returns {Boolean} True on valid, false on invalid.
  */
-function validateArgs()
-{
-    var valid = (process.argv.length>=4);
-    var invalidDataType = (typeof process.argv[2] === 'undefined' ||  typeof process.argv[3] === 'undefined' || typeof process.argv[4] === 'undefined');
+function validateArgs() {
+    var valid = (process.argv.length >= 4);
+    var invalidDataType = (typeof process.argv[2] === 'undefined' || typeof process.argv[3] === 'undefined');
     valid = valid && !invalidDataType;
     valid = valid && (process.argv[3] === 'on' || process.argv[3] === 'off' || process.argv[3] === 'identify');
     return valid;
@@ -18,57 +17,57 @@ function validateArgs()
 /**
  * Find the Switchmate and create the Toggle Session when found.
  */
-function createToggleSession()
-{
+function createToggleSession() {
     var sm_id = process.argv[2].toLowerCase();
-    console.log('Locating '+sm_id+'.');
+    console.log('Locating ' + sm_id + '.');
     SwitchmateDevice.discoverById(sm_id, onFound);
 }
 
 /**
  * Display command line usage, then exit.
  */
-function displayUsage()
-{
+function displayUsage(version) {
     console.log('Usage for toggle.switchmate:');
     console.log('Set Switchmate to a certain target state (on, off, identify)\n');
-    console.log('toggle.switchmate <switchmate_id> <target_state> <auth_code>\n');
+    if (version === 1)
+        console.log('toggle.switchmate <switchmate_id> <target_state> <auth_code>\n');
+    else
+        console.log('toggle.switchmate <switchmate_id> <target_state>\n');
     process.exit();
 }
 
-function onFound(Switchmate)
-{
-    console.log('found');
-    var auth = process.argv[4];
-    var targetState = process.argv[3];
-    Switchmate.setAuthCode(auth);
-    ToggleMode = Switchmate.ToggleMode();
-    //ToggleMode = new SwitchmateToggle(Switchmate);
-
-    ToggleMode.event.on('msg', function (msg)
-    {
-        console.log(msg);
-    }); //set event listener for logging.
-    ToggleMode.event.on('success',onSuccess);
-    ToggleMode.event.on('fail', onFail);
-    if (targetState === 'identify')
-    {
-        ToggleMode.IdentifySwitchmate();
+function onFound(Switchmate) {
+    console.log('Found Switchmate v' + (Switchmate._version === 3 ? 3 : '1/2'));
+    if (Switchmate._version === 1) {
+        var auth = process.argv[4];
+        if (!auth) return displayUsage(1);
+        Switchmate.setAuthCode(auth);
     }
-    else
-    {
+
+    var targetState = process.argv[3];
+
+    ToggleMode = Switchmate.ToggleMode();
+
+    ToggleMode.event.on('msg', function(msg) {
+        console.log(msg);
+    });
+
+    //set event listener for logging.
+    ToggleMode.event.on('success', onSuccess);
+    ToggleMode.event.on('fail', onFail);
+    if (targetState === 'identify') {
+        ToggleMode.IdentifySwitchmate();
+    } else {
         (targetState === 'on') ? ToggleMode.TurnOn() : ToggleMode.TurnOff();
     }
 }
 
-function onSuccess()
-{
+function onSuccess() {
     console.log('Success!');
     process.exit();
 }
 
-function onFail()
-{
+function onFail() {
     console.log('Failed!');
     process.exit();
 }

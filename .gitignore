@@ -50,3 +50,8 @@ jspm_packages
 
 
 # End of https://www.gitignore.io/api/node
+
+# JetBrains
+node-switchmate.iml
+node-switchmate.ipr
+node-switchmate.iws

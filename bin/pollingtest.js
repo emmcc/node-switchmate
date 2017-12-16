@@ -1,22 +1,20 @@
 #!/usr/bin/env node
 var SwitchmateDevice = require('../index').SwitchmateDevice;
-(validateArgs()) ?  createTestSession() : displayUsage();
+(validateArgs()) ? createTestSession() : displayUsage();
 
 
 /**
  * Validate commandline arguments.
  * @returns {Boolean} True on valid, false on invalid.
  */
-function validateArgs()
-{
-    var valid = (process.argv.length>=2);
+function validateArgs() {
+    var valid = (process.argv.length >= 2);
     var invalidDataType = (typeof process.argv[2] === 'undefined');
     valid = valid && !invalidDataType;
     return valid;
 }
 
-function createTestSession()
-{
+function createTestSession() {
     var sm_id = process.argv[2].toLowerCase();
     console.log('Finding ' + sm_id + '.');
     /*var Discovery = new DiscoverySession();
@@ -24,40 +22,35 @@ function createTestSession()
     SwitchmateDevice.discoverById(sm_id, onFound);
 }
 
-function displayUsage()
-{
+function displayUsage() {
     console.log('Usage for pollingtest.js:');
     console.log('Tests the state of the Switchmate during manual toggles.\n');
     console.log('pollingtest.js  <switchmate_id>\n');
     process.exit();
 }
 
-function onFound(Switchmate)
-{
+function onFound(Switchmate) {
     SwitchmateDevice.stopDiscoverAll(onFound);
-    console.log('found');
-    Switchmate.connectAndSetup(function ()
-    {
+    console.log('Found Switchmate v' + (Switchmate._version === 3 ? 3 : '1/2'));
+    console.log(Switchmate.id + ' is currently ' + Switchmate.ToggleState);
+
+    Switchmate.connectAndSetup(function() {
         console.log('connected');
         Switchmate.disconnect();
     });
-    Switchmate.on('disconnect', function ()
-    {
+    Switchmate.on('disconnect', function() {
         console.log('disconnect');
         Switchmate.startPollingSwitchmate();
     });
-    Switchmate.on('toggleStateChange', function (state, id)
-    {
-        console.log(id+' changed to ' + state);
+    Switchmate.on('toggleStateChange', function(state, id) {
+        console.log(id + ' changed to ' + state);
     });
-    
-    Switchmate.on('unreachable', function (id)
-    {
-        console.log(id+' is now unreachable.');
+
+    Switchmate.on('unreachable', function(id) {
+        console.log(id + ' is now unreachable.');
     });
-    
-    Switchmate.on('reachable', function (id)
-    {
+
+    Switchmate.on('reachable', function(id) {
         console.log(id + ' is now reachable.');
     });
 }

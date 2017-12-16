@@ -13,7 +13,7 @@
   "description": "A Node.js API for Switchmate",
   "main": "index.js",
   "bin": {
-    "node-switchmate": "pollingtest.js"
+    "node-switchmate": "bin/pollingtest.js"
   },
   "repository": {
     "type": "git",
